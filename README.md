@@ -38,10 +38,10 @@ You can pass in a format string, the default is
 :method :statusCode :url (:timems)
 ```
 
-- :method - The request method (POST|HEAD|GET|DELETE|PUT, etc.)
-- :statusCode - The response status code sent from the server
-- :url - The requested URL
-- :time - The latency from request to response in ms
+- `:method` - The request method (POST|HEAD|GET|DELETE|PUT, etc.)
+- `:statusCode` - The response status code sent from the server
+- `:url` - The requested URL
+- `:time` - The latency from request to response in ms
 
 #### function
 
