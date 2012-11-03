@@ -76,7 +76,7 @@ Extend
 ------
 
 Consider further customizing the access logs by using the [log-timestamp]
-(https://github.com/bahamas10/node-log-timestamp) to prepend the timestamp
+(https://github.com/bahamas10/node-log-timestamp) module to prepend a timestamp
 automatically.
 
 License
