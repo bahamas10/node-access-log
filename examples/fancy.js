@@ -1,7 +1,7 @@
 var http = require('http');
 var accesslog = require('../');
 
-var format = 'url=":url" method=":method" statusCode=":statusCode" time=":time"';
+var format = 'url=":url" method=":method" statusCode=":statusCode" delta=":delta" ip=":ip"';
 
 http.createServer(function(req, res) {
   accesslog(req, res, format, function(s) {

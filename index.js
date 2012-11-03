@@ -1,7 +1,7 @@
 module.exports = accesslog;
 
 function accesslog(req, res, format, func) {
-  format = format || ':method :statusCode :url (:timems)';
+  format = format || ':ip :method :statusCode :url (:deltams)';
   func = func || console.log;
 
   req._received_date = new Date();
@@ -12,11 +12,13 @@ function accesslog(req, res, format, func) {
     // call the original
     res_end.apply(res, arguments);
 
+    var delta = new Date() - req._received_date;
     var s = format
       .replace(':method', req.method)
       .replace(':statusCode', res.statusCode)
       .replace(':url', req.url)
-      .replace(':time', new Date() - req._received_date);
+      .replace(':ip', req.connection.remoteAddress)
+      .replace(':delta', delta);
 
     // log it
     func(s);

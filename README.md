@@ -20,9 +20,9 @@ This will automatically log requests as they come in to the
 web server that look like...
 
 ```
-GET 200 /testing (0ms)
-GET 200 /index.html (0ms)
-GET 200 /projects (0ms)
+127.0.0.1 GET 200 /testing (0ms)
+127.0.0.1 GET 200 /index.html (0ms)
+127.0.0.1 GET 200 /projects (0ms)
 ```
 
 Customization
@@ -35,13 +35,14 @@ Customization
 You can pass in a format string, the default is
 
 ```
-:method :statusCode :url (:timems)
+:ip :method :statusCode :url (:deltams)
 ```
 
 - `:method` - The request method (POST|HEAD|GET|DELETE|PUT, etc.)
 - `:statusCode` - The response status code sent from the server
 - `:url` - The requested URL
-- `:time` - The latency from request to response in ms
+- `:delta` - The latency from request to response in ms
+- `:ip` - The remote IP
 
 #### function
 
@@ -52,7 +53,7 @@ Example
 -------
 
 ``` js
-var format = 'url=":url" method=":method" statusCode=":statusCode" time=":time"';
+var format = 'url=":url" method=":method" statusCode=":statusCode" delta=":delta" ip=":ip"';
 
 accesslog(req, res, format, function(s) {
   console.log(s);
@@ -62,9 +63,9 @@ accesslog(req, res, format, function(s) {
 yields
 
 ```
-url="/projects" method="GET" statusCode="200" time="0"
-url="/testing" method="GET" statusCode="200" time="1"
-url="/index.html" method="GET" statusCode="200" time="0"
+url="/projects" method="GET" statusCode="200" delta="0" ip="127.0.0.1"
+url="/testing" method="GET" statusCode="200" delta="1" ip="127.0.0.1"
+url="/index.html" method="GET" statusCode="200" delta="0" ip="127.0.0.1"
 ```
 
 Installation
