@@ -1,0 +1,24 @@
+{
+  "name": "access-log",
+  "description": "Add simple access logs to any http or https server",
+  "version": "0.0.0",
+  "author": "Dave Eddy <dave@daveeddy.com> (http://www.daveeddy.com)",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bahamas10/node-access-log.git"
+  },
+  "scripts": {},
+  "main": "./index.js",
+  "dependencies": {},
+  "bin": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "keywords": [
+    "access",
+    "logs"
+  ]
+}
