@@ -1,8 +1,15 @@
+var def_format = ':ip :method :statusCode :url (:deltams)';
+
 module.exports = accesslog;
 
-function accesslog(req, res, format, func) {
-  format = format || ':ip :method :statusCode :url (:deltams)';
-  func = func || console.log;
+function accesslog(req, res, format, cb) {
+  if (typeof format === 'function') {
+    cb = format;
+    format = null;
+  }
+
+  format = format || def_format;
+  cb = cb || console.log;
 
   req._received_date = new Date();
 
@@ -21,6 +28,6 @@ function accesslog(req, res, format, func) {
       .replace(':delta', delta);
 
     // log it
-    func(s);
+    cb(s);
   };
 }
