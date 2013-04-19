@@ -11,15 +11,15 @@ function accesslog(req, res, format, cb) {
   format = format || def_format;
   cb = cb || console.log;
 
-  req._received_date = new Date();
+  var received_date = new Date();
 
   // override res.end to capture all responses
-  var res_end = res.end;
+  var res_end = res.end.bind(res);
   res.end = function() {
     // call the original
     res_end.apply(res, arguments);
 
-    var delta = new Date() - req._received_date;
+    var delta = new Date() - received_date;
     var s = format
       .replace(':method', req.method)
       .replace(':statusCode', res.statusCode)
