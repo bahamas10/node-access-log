@@ -1,6 +1,6 @@
 var strftime = require('strftime');
 
-var defaultformat = ':ip :userAgent :userID [:clfDate] ":method :url HTTP/:httpVersion" :statusCode :contentLength';
+var defaultformat = ':ip - :userID [:clfDate] ":method :url HTTP/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"';
 
 module.exports = accesslog;
 
@@ -38,6 +38,7 @@ function accesslog(req, res, format, cb) {
       .replace(':ip', req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-')
       .replace(':method', req.method)
       .replace(':protocol', req.connection.encrypted ? 'HTTPS' : 'HTTP')
+      .replace(':referer', req.headers['referer'] || '-')
       .replace(':startDate', start.toISOString())
       .replace(':startTime', start.getTime())
       .replace(':statusCode', res.statusCode)

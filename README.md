@@ -20,9 +20,9 @@ This will automatically log requests as they come in to the
 web server that look like...
 
 ```
-127.0.0.1 - - [13/Sep/2013:01:38:09 -0400] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [13/Sep/2013:01:38:09 -0400] "GET /testing HTTP/1.1" 200 -
-127.0.0.1 - - [13/Sep/2013:01:38:10 -0400] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [13/Sep/2013:01:38:09 -0400] "GET / HTTP/1.1" 200 - "-" "-"
+127.0.0.1 - - [13/Sep/2013:01:38:09 -0400] "GET /testing HTTP/1.1" 200 - "-" "-"
+127.0.0.1 - - [13/Sep/2013:01:38:10 -0400] "GET /index.html HTTP/1.1" 200 - "-" "-"
 ```
 
 Customization
@@ -48,6 +48,7 @@ http://en.wikipedia.org/wiki/Common_Log_Format
 - `ip`: The remote IP, using `X-Forwarded-For` if set
 - `method`: The HTTP method
 - `protocol`: `HTTP` or `HTTPS`
+- `referer`: The request `Referer` header, or `-` if unset
 - `startDate`: The ISO formatted string when the request was received
 - `startTime`: The epoch time when the request was received
 - `statusCode`: The response status code sent from the server

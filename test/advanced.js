@@ -15,6 +15,7 @@ var format = [
   'ip: :ip',
   'method: :method',
   'protocol: :protocol',
+  'referer: :referer',
   'startDate: :startDate',
   'startTime: :startTime',
   'statusCode: :statusCode',
