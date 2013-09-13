@@ -1,4 +1,6 @@
-var def_format = ':ip :method :statusCode :url (:deltams)';
+var strftime = require('strftime');
+
+var defaultformat = ':ip :userAgent :userID [:clfDate] ":method :url HTTP/:httpVersion" :statusCode :contentLength';
 
 module.exports = accesslog;
 
@@ -8,24 +10,41 @@ function accesslog(req, res, format, cb) {
     format = null;
   }
 
-  format = format || def_format;
-  cb = cb || console.log;
+  format = format || defaultformat;
+  cb = cb || console.log.bind(console);
 
-  var received_date = new Date();
+  var uriDecoded = req.url;
+  try {
+    uriDecoded = decodeURIComponent(uriDecoded);
+  } catch (e) {}
+
+  var start = new Date();
 
   // override res.end to capture all responses
-  var res_end = res.end.bind(res);
+  var resend = res.end.bind(res);
   res.end = function() {
     // call the original
-    res_end.apply(res, arguments);
+    resend.apply(res, arguments);
 
-    var delta = new Date() - received_date;
+    var end = new Date();
+    var delta = end - start;
     var s = format
+      .replace(':clfDate', strftime('%d/%b/%Y:%H:%M:%S %z', end))
+      .replace(':contentLength', res.getHeader('content-length') || '-')
+      .replace(':delta', delta)
+      .replace(':endDate', end.toISOString())
+      .replace(':endTime', end.getTime())
+      .replace(':httpVersion', req.httpVersion)
+      .replace(':ip', req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-')
       .replace(':method', req.method)
+      .replace(':protocol', req.connection.encrypted ? 'HTTPS' : 'HTTP')
+      .replace(':startDate', start.toISOString())
+      .replace(':startTime', start.getTime())
       .replace(':statusCode', res.statusCode)
       .replace(':url', req.url)
-      .replace(':ip', req.connection.remoteAddress)
-      .replace(':delta', delta);
+      .replace(':urlDecoded', uriDecoded)
+      .replace(':userID', (req.session && (req.session.user || req.session.id)) || '-')
+      .replace(':userAgent', req.headers['user-agent'] || '-');
 
     // log it
     cb(s);

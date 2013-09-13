@@ -8,15 +8,16 @@
     "type": "git",
     "url": "git://github.com/bahamas10/node-access-log.git"
   },
-  "scripts": {},
-  "main": "./index.js",
-  "dependencies": {},
-  "bin": {},
-  "devDependencies": {},
-  "optionalDependencies": {},
   "scripts": {
     "test": "for f in test/*; do echo \"$f\"; node \"$f\" || exit 1; done; echo Passed; exit 0"
   },
+  "main": "./index.js",
+  "dependencies": {
+    "strftime": "~0.6.2"
+  },
+  "bin": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
   "engines": {
     "node": "*"
   },
