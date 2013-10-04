@@ -30,8 +30,12 @@ function accesslog(req, res, format, cb) {
       reason = null;
     }
 
-    if (headers && 'Content-Length' in headers) {
-      res.contentLength = headers["Content-Length"];
+    if (headers) {
+      for (var k in headers) {
+        if (k.toLowerCase() == "content-length") {
+          res.contentLength = headers[k];
+		}
+	  }
     }
   };
   
