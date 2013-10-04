@@ -20,6 +20,25 @@ function accesslog(req, res, format, cb) {
 
   var start = new Date();
 
+  // override res.writeHead to track contentLength
+  var resWriteHead = res.writeHead.bind(res);
+  res.writeHead = function(statusCode, reason, headers) {
+    resWriteHead.apply(res, arguments);
+
+    if (typeof reason === "object" && !headers) {
+      headers = reason;
+      reason = null;
+    }
+
+    if (headers) {
+      for (var k in headers) {
+        if (k.toLowerCase() == "content-length") {
+          res.contentLength = headers[k];
+		}
+	  }
+    }
+  };
+  
   // override res.end to capture all responses
   var resend = res.end.bind(res);
   res.end = function() {
@@ -30,7 +49,7 @@ function accesslog(req, res, format, cb) {
     var delta = end - start;
     var s = format
       .replace(':clfDate', strftime('%d/%b/%Y:%H:%M:%S %z', end))
-      .replace(':contentLength', res.getHeader('content-length') || '-')
+      .replace(':contentLength', res.getHeader('content-length') || res.contentLength || '-')
       .replace(':delta', delta)
       .replace(':endDate', end.toISOString())
       .replace(':endTime', end.getTime())
