@@ -34,11 +34,11 @@ function accesslog(req, res, format, cb) {
       for (var k in headers) {
         if (k.toLowerCase() == "content-length") {
           res.contentLength = headers[k];
-		}
-	  }
+        }
+      }
     }
   };
-  
+
   // override res.end to capture all responses
   var resend = res.end.bind(res);
   res.end = function() {
