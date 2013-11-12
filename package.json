@@ -1,7 +1,7 @@
 {
   "name": "access-log",
   "description": "Add simple access logs to any http or https server",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Dave Eddy <dave@daveeddy.com> (http://www.daveeddy.com)",
   "contributors": [],
   "repository": {
