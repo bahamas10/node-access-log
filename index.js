@@ -57,23 +57,24 @@ function accesslog(req, res, format, cb) {
       ':endTime': end.getTime(),
       ':httpVersion': req.httpVersion,
       ':ip': req.connection.remoteAddress || '-',
-      ':Xip': req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-',
+      ':Xip': encode(req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-'),
       ':method': req.method,
       ':protocol': req.connection.encrypted ? 'HTTPS' : 'HTTP',
-      ':referer': req.headers.referer || '-',
+      ':referer': encode(req.headers.referer || '-'),
       ':startDate': start.toISOString(),
       ':startTime': start.getTime(),
       ':statusCode': res.statusCode,
-      ':url': req.url,
-      ':urlDecoded': uriDecoded,
-      ':userID': (req.session && (req.session.user || req.session.id)) || '-',
-      ':userAgent': req.headers['user-agent'] || '-'
+      ':url': encode(req.url),
+      ':urlDecoded': encode(uriDecoded),
+      ':userID': encode((req.session && (req.session.user || req.session.id)) || '-'),
+      ':userAgent': encode(req.headers['user-agent'] || '-')
     };
 
     cb(template(format, data));
   };
 }
 
+// replace :variable and :{variable} in `s` with what's in `d`
 function template(s, d) {
   s = s.replace(/(:[a-zA-Z]+)/g, function(match, key) {
     return d[key] || '';
@@ -81,4 +82,9 @@ function template(s, d) {
   return s.replace(/:{([a-zA-Z]+)}/g, function(match, key) {
     return d[':' + key] || '';
   });
+}
+
+// make a string safe to put in double quotes in CLF
+function encode(s) {
+  return s.replace(/\\/g, '\\x5C').replace(/"/, '\\x22');
 }
