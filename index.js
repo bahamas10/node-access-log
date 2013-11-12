@@ -47,26 +47,35 @@ function accesslog(req, res, format, cb) {
 
     var end = new Date();
     var delta = end - start;
-    var s = format
-      .replace(':clfDate', strftime('%d/%b/%Y:%H:%M:%S %z', end))
-      .replace(':contentLength', res.getHeader('content-length') || res.contentLength || '-')
-      .replace(':delta', delta)
-      .replace(':endDate', end.toISOString())
-      .replace(':endTime', end.getTime())
-      .replace(':httpVersion', req.httpVersion)
-      .replace(':ip', req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-')
-      .replace(':method', req.method)
-      .replace(':protocol', req.connection.encrypted ? 'HTTPS' : 'HTTP')
-      .replace(':referer', req.headers['referer'] || '-')
-      .replace(':startDate', start.toISOString())
-      .replace(':startTime', start.getTime())
-      .replace(':statusCode', res.statusCode)
-      .replace(':url', req.url)
-      .replace(':urlDecoded', uriDecoded)
-      .replace(':userID', (req.session && (req.session.user || req.session.id)) || '-')
-      .replace(':userAgent', req.headers['user-agent'] || '-');
+    var data = {
+      ':clfDate': strftime('%d/%b/%Y:%H:%M:%S %z', end),
+      ':contentLength': res.getHeader('content-length') || res.contentLength || '-',
+      ':delta': delta,
+      ':endDate': end.toISOString(),
+      ':endTime': end.getTime(),
+      ':httpVersion': req.httpVersion,
+      ':ip': req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-',
+      ':method': req.method,
+      ':protocol': req.connection.encrypted ? 'HTTPS' : 'HTTP',
+      ':referer': req.headers.referer || '-',
+      ':startDate': start.toISOString(),
+      ':startTime': start.getTime(),
+      ':statusCode': res.statusCode,
+      ':url': req.url,
+      ':urlDecoded': uriDecoded,
+      ':userID': (req.session && (req.session.user || req.session.id)) || '-',
+      ':userAgent': req.headers['user-agent'] || '-'
+    };
 
-    // log it
-    cb(s);
+    cb(template(format, data));
   };
+}
+
+function template(s, d) {
+  s = s.replace(/(:[a-zA-Z]+)/g, function(match, key) {
+    return d[key] || '';
+  });
+  return s.replace(/:{([a-zA-Z]+)}/g, function(match, key) {
+    return d[':' + key] || '';
+  });
 }

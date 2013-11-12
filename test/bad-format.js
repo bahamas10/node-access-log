@@ -17,7 +17,7 @@ function onrequest(req, res) {
 function started() {
   console.log('server started');
 
-  var req = http.request('http://localhost:9127/testing', function() {
+  var req = http.request('http://localhost:9127/PWN3D:userAgentPWN3D', function() {
     process.exit(0);
   });
   req.end();

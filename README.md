@@ -57,9 +57,17 @@ http://en.wikipedia.org/wiki/Common_Log_Format
 - `userID`: The username if applicable
 - `userAgent`: The request `User-Agent` header, or `-` if unset
 
+**NOTE:** Wrap variables in `{}` to protect against unwanted interpolation.
+
+ex:
+
+```
+request to :url took :{delta}ms
+```
+
 #### function
 
-You can also pass in your own custom callback, the default is console.log.
+You can also pass in your own custom callback, the default is `console.log`.
 The only argument passed is the access log string
 
 Example
