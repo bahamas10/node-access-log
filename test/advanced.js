@@ -13,6 +13,7 @@ var format = [
   'endTime: :endTime',
   'httpVersion: :httpVersion',
   'ip: :ip',
+  'Xip: :Xip',
   'method: :method',
   'protocol: :protocol',
   'referer: :referer',

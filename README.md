@@ -45,7 +45,8 @@ http://en.wikipedia.org/wiki/Common_Log_Format
 - `endDate`: The ISO formatted string when the response was ended
 - `endTime`: The epoch time when the response was ended
 - `httpVersion`: The HTTP version used (ie. `1.0`, `1.1`)
-- `ip`: The remote IP, using `X-Forwarded-For` if set
+- `ip`: The remote IP
+- `Xip`: The remote IP, using `X-Forwarded-For` if set
 - `method`: The HTTP method
 - `protocol`: `HTTP` or `HTTPS`
 - `referer`: The request `Referer` header, or `-` if unset
