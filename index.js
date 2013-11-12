@@ -13,10 +13,12 @@ function accesslog(req, res, format, cb) {
   format = format || defaultformat;
   cb = cb || console.log.bind(console);
 
-  var uriDecoded = req.url;
+  var uriDecoded;
   try {
     uriDecoded = decodeURIComponent(uriDecoded);
-  } catch (e) {}
+  } catch (e) {
+    uriDecoded = e.message || 'Error decoding URI';
+  }
 
   var start = new Date();
 
