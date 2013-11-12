@@ -36,7 +36,7 @@ You can pass in a format string, the default is Apache Common Log Format
 http://en.wikipedia.org/wiki/Common_Log_Format
 
 ```
-:ip - :userID [:clfDate] ":method :url HTTP/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"
+:ip - :userID [:clfDate] ":method :url :protocol/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"
 ```
 
 - `clfDate`: The date of the end of the response in Apache Common Log format

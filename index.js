@@ -1,6 +1,6 @@
 var strftime = require('strftime');
 
-var defaultformat = ':ip - :userID [:clfDate] ":method :url HTTP/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"';
+var defaultformat = ':ip - :userID [:clfDate] ":method :url :protocol/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"';
 
 module.exports = accesslog;
 
