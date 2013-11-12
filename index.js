@@ -15,7 +15,7 @@ function accesslog(req, res, format, cb) {
 
   var uriDecoded;
   try {
-    uriDecoded = decodeURIComponent(uriDecoded);
+    uriDecoded = decodeURIComponent(req.url);
   } catch (e) {
     uriDecoded = e.message || 'Error decoding URI';
   }
