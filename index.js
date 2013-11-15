@@ -10,6 +10,7 @@ function accesslog(req, res, format, cb) {
     format = null;
   }
 
+  var remoteAddress = req.connection.remoteAddress;
   format = format || defaultformat;
   cb = cb || console.log.bind(console);
 
@@ -56,8 +57,8 @@ function accesslog(req, res, format, cb) {
       ':endDate': end.toISOString(),
       ':endTime': end.getTime(),
       ':httpVersion': req.httpVersion,
-      ':ip': req.connection.remoteAddress || '-',
-      ':Xip': encode(req.headers['x-forwarded-for'] || req.connection.remoteAddress || '-'),
+      ':ip': remoteAddress || '-',
+      ':Xip': encode(req.headers['x-forwarded-for'] || remoteAddress || '-'),
       ':method': req.method,
       ':protocol': req.connection.encrypted ? 'HTTPS' : 'HTTP',
       ':referer': encode(req.headers.referer || '-'),
