@@ -50,6 +50,10 @@ function accesslog(req, res, format, cb) {
 
     var end = new Date();
     var delta = end - start;
+    var userID;
+    try {
+      userID = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':')[0];
+    } catch(e) {}
     var data = {
       ':clfDate': strftime('%d/%b/%Y:%H:%M:%S %z', end),
       ':contentLength': res.getHeader('content-length') || res.contentLength || '-',
@@ -67,7 +71,7 @@ function accesslog(req, res, format, cb) {
       ':statusCode': res.statusCode,
       ':url': encode(req.url),
       ':urlDecoded': encode(uriDecoded),
-      ':userID': encode((req.session && (req.session.user || req.session.id)) || '-'),
+      ':userID': encode(userID || '-'),
       ':userAgent': encode(req.headers['user-agent'] || '-')
     };
 
