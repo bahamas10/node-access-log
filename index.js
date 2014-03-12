@@ -23,11 +23,33 @@ function accesslog(req, res, format, cb) {
 
   var start = new Date();
 
+  // override res.writeHead to track contentLength
+  var resWriteHead = res.writeHead.bind(res);
+  res.writeHead = function(statusCode, reason, headers) {
+    resWriteHead.apply(res, arguments);
+
+    if (typeof reason === "object" && !headers) {
+      headers = reason;
+      reason = null;
+    }
+
+    if (headers) {
+      for (var k in headers) {
+        if (k.toLowerCase() == "content-length") {
+          res.contentLength = headers[k];
+        }
+      }
+    }
+  };
+
   // override res.end to capture all responses
-  res.on('finish', function accesslog_finish() {
+  var resend = res.end.bind(res);
+  res.end = function() {
+    // call the original
+    resend.apply(res, arguments);
+
     var end = new Date();
     var delta = end - start;
-
     var userID;
     try {
       userID = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':')[0];
@@ -54,7 +76,7 @@ function accesslog(req, res, format, cb) {
     };
 
     cb(template(format, data));
-  });
+  };
 }
 
 // replace :variable and :{variable} in `s` with what's in `d`
@@ -62,7 +84,7 @@ function template(s, d) {
   s = s.replace(/(:[a-zA-Z]+)/g, function(match, key) {
     return d[key] || '';
   });
-  s.replace(/:{([a-zA-Z]+)}/g, function(match, key) {
+  return s.replace(/:{([a-zA-Z]+)}/g, function(match, key) {
     return d[':' + key] || '';
   });
 }
