@@ -11,6 +11,7 @@ function accesslog(req, res, format, cb) {
   }
 
   var remoteAddress = req.connection.remoteAddress;
+  var contentLength;
   format = format || defaultformat;
   cb = cb || console.log.bind(console);
 
@@ -18,7 +19,7 @@ function accesslog(req, res, format, cb) {
   try {
     uriDecoded = decodeURIComponent(req.url);
   } catch (e) {
-    uriDecoded = e.message || 'Error decoding URI';
+    uriDecoded = e.message || 'error decoding URI';
   }
 
   var start = new Date();
@@ -26,27 +27,28 @@ function accesslog(req, res, format, cb) {
   // override res.writeHead to track contentLength
   var resWriteHead = res.writeHead.bind(res);
   res.writeHead = function(statusCode, reason, headers) {
-    resWriteHead.apply(res, arguments);
+    var ret = resWriteHead.apply(res, arguments);
 
-    if (typeof reason === "object" && !headers) {
+    if (typeof reason === 'object' && !headers) {
       headers = reason;
       reason = null;
     }
 
     if (headers) {
-      for (var k in headers) {
-        if (k.toLowerCase() == "content-length") {
-          res.contentLength = headers[k];
-        }
-      }
+      Object.keys(headers).forEach(function(key) {
+        if (key.toLowerCase() === 'content-length')
+          contentLength = headers[key];
+      });
     }
+
+    return ret;
   };
 
   // override res.end to capture all responses
   var resend = res.end.bind(res);
   res.end = function() {
     // call the original
-    resend.apply(res, arguments);
+    var ret = resend.apply(res, arguments);
 
     var end = new Date();
     var delta = end - start;
@@ -56,10 +58,11 @@ function accesslog(req, res, format, cb) {
     } catch(e) {}
     var data = {
       ':clfDate': strftime('%d/%b/%Y:%H:%M:%S %z', end),
-      ':contentLength': res.getHeader('content-length') || res.contentLength || '-',
+      ':contentLength': res.getHeader('content-length') || contentLength || '-',
       ':delta': delta,
       ':endDate': end.toISOString(),
       ':endTime': end.getTime(),
+      ':host': encode(req.headers.host || '-'),
       ':httpVersion': req.httpVersion,
       ':ip': remoteAddress || '-',
       ':Xip': encode(req.headers['x-forwarded-for'] || remoteAddress || '-'),
@@ -76,6 +79,8 @@ function accesslog(req, res, format, cb) {
     };
 
     cb(template(format, data));
+
+    return ret;
   };
 }
 

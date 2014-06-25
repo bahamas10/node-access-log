@@ -11,6 +11,7 @@ var format = [
   'delta: :delta',
   'endDate: :endDate',
   'endTime: :endTime',
+  'host: :host',
   'httpVersion: :httpVersion',
   'ip: :ip',
   'Xip: :Xip',

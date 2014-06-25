@@ -44,6 +44,7 @@ http://en.wikipedia.org/wiki/Common_Log_Format
 - `delta`: The time in ms from request to response
 - `endDate`: The ISO formatted string when the response was ended
 - `endTime`: The epoch time when the response was ended
+- `host`: The host header from the request if set
 - `httpVersion`: The HTTP version used (ie. `1.0`, `1.1`)
 - `ip`: The remote IP
 - `Xip`: The remote IP, using `X-Forwarded-For` if set
