@@ -11,7 +11,11 @@ function accesslog(req, res, format, cb) {
   }
 
   var remoteAddress = req.connection.remoteAddress;
-  var contentLength;
+  var contentLength, options = {};
+  if (typeof format === 'object') {
+    options = format;
+    format = options.format;
+  }
   format = format || defaultformat;
   cb = cb || console.log.bind(console);
 
@@ -54,7 +58,7 @@ function accesslog(req, res, format, cb) {
     var delta = end - start;
     var userID;
     try {
-      userID = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':')[0];
+      userID = (options.userID || basiAuthUserID)(req);
     } catch(e) {}
     var data = {
       ':clfDate': strftime('%d/%b/%Y:%H:%M:%S %z', end),
@@ -82,6 +86,10 @@ function accesslog(req, res, format, cb) {
 
     return ret;
   };
+}
+
+function basiAuthUserID(req) {
+  return new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':')[0];
 }
 
 // replace :variable and :{variable} in `s` with what's in `d`
