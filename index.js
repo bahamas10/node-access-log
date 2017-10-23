@@ -10,7 +10,7 @@ function accesslog(req, res, format, cb) {
     format = null;
   }
 
-  var remoteAddress = req.connection.remoteAddress;
+  var remoteAddress = req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   var contentLength;
   format = format || defaultformat;
   cb = cb || console.log.bind(console);
