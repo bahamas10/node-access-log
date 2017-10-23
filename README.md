@@ -28,12 +28,25 @@ web server that look like...
 Customization
 -------------
 
-### accesslog(req, res, [format], [function])
+### accesslog(req, res, [opts], [function])
 
-#### format
+#### opts
+
+Opts is an object that can contain a format identifier and userID func (both optional).
+
+For example,
+
+``` js
+{
+    userID: function (req) { return req.user; },
+    format : 'url=":url" method=":method" statusCode=":statusCode" delta=":delta" ip=":ip"'
+}
+```
 
 You can pass in a format string, the default is Apache Common Log Format
 http://en.wikipedia.org/wiki/Common_Log_Format
+
+If `opts` is a string, it is assumed to be the `opts.format` property.
 
 ```
 :ip - :userID [:clfDate] ":method :url :protocol/:httpVersion" :statusCode :contentLength ":referer" ":userAgent"
