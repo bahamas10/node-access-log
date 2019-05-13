@@ -69,6 +69,7 @@ function accesslog(req, res, format, cb) {
       ':host': encode(req.headers.host || '-'),
       ':httpVersion': req.httpVersion,
       ':ip': remoteAddress || '-',
+      ':Xfip': encode(req.headers['x-forwarded-ip'] || '-'),
       ':Xip': encode(req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || remoteAddress || '-'),
       ':method': req.method,
       ':protocol': req.connection.encrypted ? 'HTTPS' : 'HTTP',
