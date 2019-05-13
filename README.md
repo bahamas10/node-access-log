@@ -60,6 +60,7 @@ If `opts` is a string, it is assumed to be the `opts.format` property.
 - `host`: The host header from the request if set
 - `httpVersion`: The HTTP version used (ie. `1.0`, `1.1`)
 - `ip`: The remote IP
+- `Xfip`: The remote IP, using `X-Forwarded-IP` if set
 - `Xip`: The remote IP, using `X-Forwarded-For` if set
 - `method`: The HTTP method
 - `protocol`: `HTTP` or `HTTPS`
