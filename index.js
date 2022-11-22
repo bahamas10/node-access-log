@@ -7,7 +7,7 @@ module.exports = accesslog;
 function accesslog(req, res, format, cb) {
   if (typeof format === 'function') {
     cb = format;
-    format = null;
+    format = undefined;
   }
 
   var remoteAddress = req.connection.remoteAddress;
